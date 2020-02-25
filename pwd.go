@@ -66,8 +66,8 @@ func joinPass() {
 				continue
 			}
 			if len(v) > 6 {
-				// fmt.Println(v)
-				WriteToFile("result_weak_pass.txt", v+"\n")
+				//fmt.Println(len(v))
+				WriteToFile("result_weak_pass.txt", v + "\n")
 				count++
 			}
 			/*
@@ -189,19 +189,27 @@ func dealByteWord(bytepass []string) {
 	for _, v1 := range sourcespass {
 		for _, v2 := range bytepass {
 			// fmt.Println(v1 + v2)
-			sourcespass = append(sourcespass, v1+v2, v2+v1)
+			if v1 != "" && v2 != "" {
+				sourcespass = append(sourcespass, delRN(v1)+addRN(v2), delRN(v2)+addRN(v1))
+			}
 		}
 	}
 	sourcespass = append(sourcespass, bytepass...)
 }
-
+func addRN(src string) string {
+	if strings.Contains(src, "\r") {
+		return src
+	} else {return src + "\r"}
+}
+func delRN(src string) string {
+	return strings.Replace(src, "\r", "", -1)
+}
 //处理初始密码，如123，888，520
 func dealInitPass() {
 	initpasslist := readPass("initpass.txt")
 	passlist := strings.Split(initpasslist, "\n")
 	sourcespass = append(sourcespass, passlist...)
 	// fmt.Println(passlist)
-
 }
 
 func main() {
